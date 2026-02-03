@@ -28,7 +28,7 @@ jobs:
     - name: Install Playwright browsers
       run: |
         playwright install chromium
-        playwright install-deps chromium
+        playwright install-deps chromium || echo "Browser dependencies may need manual installation"
         
     - name: Run tests
       working-directory: ./POC-PW
