@@ -3,6 +3,13 @@ from playwright.sync_api import expect
 
 @pytest.mark.order(2)
 def test_SearchValidation(shared_page):
+       """
+       This test depends on test_TitleValidation running first.
+       It reuses the same browser page that was navigated to http://localhost:93
+       by test_TitleValidation, maintaining all browser state and DOM.
+       
+       Note: If test_TitleValidation fails or is skipped, this test will also fail.
+       """
        # Browser continues from where test_TitleValidation left off
        # No need to navigate again - reusing the same page
        startdatebutton= shared_page.locator("xpath=//*[@id='cdk-accordion-child-0']//mat-form-field[.//mat-label[normalize-space()='Event start date']]//button[@matsuffix and @aria-label='Select date']")
