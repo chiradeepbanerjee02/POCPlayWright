@@ -85,6 +85,7 @@ jobs:
       if: steps.check-packages.outputs.packages_installed != 'true'
       shell: pwsh
       run: |
+        $ErrorActionPreference = 'Stop'
         python -m pip install --upgrade pip
         python -m pip install pytest playwright pytest-playwright pytest-html
     
@@ -112,6 +113,7 @@ jobs:
       if: steps.check-browser.outputs.browser_installed != 'true'
       shell: pwsh
       run: |
+        $ErrorActionPreference = 'Stop'
         playwright install chromium
         $ErrorActionPreference = 'Continue'
         playwright install-deps chromium 2>&1 | Out-Null
@@ -123,6 +125,7 @@ jobs:
       working-directory: ./POC-PW
       shell: pwsh
       run: |
+        $ErrorActionPreference = 'Stop'
         pytest --html=reports/report.html --self-contained-html
         
     - name: Upload test reports
