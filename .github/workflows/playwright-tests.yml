@@ -1,0 +1,48 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: [self-hosted, us14-acuo125]
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest playwright pytest-playwright pytest-html
+        
+    - name: Install Playwright browsers
+      run: |
+        playwright install chromium
+        playwright install-deps chromium || echo "Browser dependencies may need manual installation"
+        
+    - name: Run tests
+      working-directory: ./POC-PW
+      run: |
+        pytest --html=reports/report.html --self-contained-html
+        
+    - name: Upload test reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-test-reports
+        path: POC-PW/reports/
+        retention-days: 30
