@@ -23,6 +23,7 @@ jobs:
       id: check-python
       shell: pwsh
       run: |
+        $ErrorActionPreference = 'Stop'
         try {
           $pythonVersion = & python --version 2>&1
           if ($pythonVersion -match "Python 3\.10") {
@@ -112,9 +113,9 @@ jobs:
       shell: pwsh
       run: |
         playwright install chromium
-        try {
-          playwright install-deps chromium 2>&1 | Out-Null
-        } catch {
+        $ErrorActionPreference = 'Continue'
+        playwright install-deps chromium 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
           Write-Host "Browser dependencies may need manual installation"
         }
         
