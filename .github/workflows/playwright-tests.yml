@@ -9,6 +9,9 @@ on:
 
 jobs:
   test:
+    # Self-hosted runner configuration
+    # To set up: See RUNNER_SETUP.md or QUICKSTART.md for detailed instructions
+    # To use GitHub-hosted runner instead, replace the line below with: runs-on: ubuntu-latest
     runs-on: [self-hosted, us14-acuo125]
     
     permissions:
