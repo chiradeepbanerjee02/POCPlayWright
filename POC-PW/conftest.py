@@ -1,9 +1,11 @@
+
 from __future__ import annotations
 
 import os
 import pytest
 
 STATE_PATH = os.path.join(os.path.dirname(__file__), "state.json")
+BASE_URL = "http://localhost:93"
 
 
 @pytest.fixture(scope="session")
@@ -56,5 +58,8 @@ def shared_page(shared_context):
     This page persists across tests in the same module.
     """
     p = shared_context.new_page()
+    # Always start from a known state
+    page.goto(BASE_URL, wait_until="domcontentloaded")
     yield p
     p.close()
+
