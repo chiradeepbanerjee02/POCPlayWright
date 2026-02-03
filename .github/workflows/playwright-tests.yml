@@ -11,6 +11,10 @@ jobs:
   test:
     runs-on: [self-hosted, us14-acuo125]
     
+    permissions:
+      contents: read
+      actions: read
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
