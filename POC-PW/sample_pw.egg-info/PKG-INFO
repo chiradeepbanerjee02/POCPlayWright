@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: sample-pw
+Version: 0.1.0
+Requires-Python: >=3.10
+Requires-Dist: pytest>=7.0
+Requires-Dist: playwright>=1.40
+Requires-Dist: pytest-playwright>=0.4.0
+Requires-Dist: pytest-order>=1.0.0
+Requires-Dist: pytest-html>=3.0.0
