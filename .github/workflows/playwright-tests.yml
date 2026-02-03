@@ -63,19 +63,27 @@ jobs:
       id: check-packages
       shell: pwsh
       run: |
-        $pythonCmd = if (Get-Command python -ErrorAction SilentlyContinue) { "python" } else { "py -3.10" }
+        # Determine Python command and arguments
+        if (Get-Command python -ErrorAction SilentlyContinue) {
+          $pythonExe = "python"
+          $pythonArgs = @()
+        } else {
+          $pythonExe = "py"
+          $pythonArgs = @("-3.10")
+        }
         
         $allInstalled = $true
         $packages = @("pytest", "playwright", "pytest-playwright", "pytest-html")
         foreach ($package in $packages) {
           try {
-            $null = & $pythonCmd -m pip show $package 2>&1
+            $null = & $pythonExe @pythonArgs -m pip show $package 2>&1
             if ($LASTEXITCODE -ne 0) {
               Write-Host "Package $package not found"
               $allInstalled = $false
               break
             }
           } catch {
+            Write-Host "Package $package not found (exception: $_)"
             $allInstalled = $false
             break
           }
@@ -91,9 +99,16 @@ jobs:
       if: steps.check-packages.outputs.packages_installed != 'true'
       shell: pwsh
       run: |
-        $pythonCmd = if (Get-Command python -ErrorAction SilentlyContinue) { "python" } else { "py -3.10" }
-        & $pythonCmd -m pip install --upgrade pip
-        & $pythonCmd -m pip install pytest playwright pytest-playwright pytest-html
+        # Determine Python command and arguments
+        if (Get-Command python -ErrorAction SilentlyContinue) {
+          $pythonExe = "python"
+          $pythonArgs = @()
+        } else {
+          $pythonExe = "py"
+          $pythonArgs = @("-3.10")
+        }
+        & $pythonExe @pythonArgs -m pip install --upgrade pip
+        & $pythonExe @pythonArgs -m pip install pytest playwright pytest-playwright pytest-html
     
     - name: Check Playwright browser
       id: check-browser
