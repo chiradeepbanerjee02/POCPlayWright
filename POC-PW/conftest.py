@@ -37,3 +37,24 @@ def page(context):
     p = context.new_page()
     yield p
     p.close()
+
+
+@pytest.fixture(scope="module")
+def shared_context(browser, storage_state):
+    """
+    Shared context for tests that need to maintain browser state across tests.
+    """
+    ctx = browser.new_context(storage_state=storage_state)
+    yield ctx
+    ctx.close()
+
+
+@pytest.fixture(scope="module")
+def shared_page(shared_context):
+    """
+    Shared page for tests that need to maintain browser state across tests.
+    This page persists across tests in the same module.
+    """
+    p = shared_context.new_page()
+    yield p
+    p.close()
