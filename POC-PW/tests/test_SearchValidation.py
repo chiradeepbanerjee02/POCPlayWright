@@ -3,7 +3,7 @@ from playwright.sync_api import expect
 
 @pytest.mark.order(2)
 def test_SearchValidation(page):
-       page.goto("http://localhost:93")
+       #page.goto("http://localhost:93")
        startdatebutton= page.locator("xpath=//*[@id='cdk-accordion-child-0']//mat-form-field[.//mat-label[normalize-space()='Event start date']]//button[@matsuffix and @aria-label='Select date']")
        expect(startdatebutton).to_be_visible()
        expect(startdatebutton).to_be_enabled()
@@ -21,6 +21,7 @@ def test_SearchValidation(page):
        expect(el).to_have_count(1)     # exists in DOM
        # or, if it must be visible:
        expect(el).to_be_visible()
+
 
 
 
