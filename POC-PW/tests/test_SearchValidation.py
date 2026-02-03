@@ -33,10 +33,10 @@ def test_SearchValidation(shared_page):
        expect(el).to_be_visible()
        print("Copy the first audit log to output")
        print("*************************************************")
-       searchresultrow=page.locator("xpath=//cdk-virtual-scroll-viewport//table//tbody/tr[2]")
+       searchresultrow=shared_page.locator("xpath=//cdk-virtual-scroll-viewport//table//tbody/tr[2]")
        expect(searchresultrow).to_be_visible()
        searchresultrow.click()
-       auditmsg=page.locator("xpath=//app-record-viewer//app-record-details/*[1]/*[1]")
+       auditmsg=shared_page.locator("xpath=//app-record-viewer//app-record-details/*[1]/*[1]")
        expect(auditmsg).to_be_visible()
        outer_html = auditmsg.evaluate("el => el.outerHTML")
        m = re.search(r"<textarea\b[^>]*>(.*?)</textarea>", outer_html, flags=re.DOTALL | re.IGNORECASE)
@@ -44,6 +44,7 @@ def test_SearchValidation(shared_page):
        xml_text = html.unescape(textarea_inner)
        print(xml_text)
        print("*************************************************")
+
 
 
 
