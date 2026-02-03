@@ -66,13 +66,13 @@ jobs:
       if: steps.check-packages.outputs.packages_installed != 'true'
       run: |
         python3.10 -m pip install --upgrade pip
-        pip install pytest playwright pytest-playwright pytest-html
+        python3.10 -m pip install pytest playwright pytest-playwright pytest-html
     
     - name: Check Playwright browser
       id: check-browser
       run: |
         # Check if chromium directory exists in the Playwright cache
-        if ls "$HOME/.cache/ms-playwright/chromium-"* 1> /dev/null 2>&1; then
+        if [ -d "$HOME/.cache/ms-playwright" ] && compgen -G "$HOME/.cache/ms-playwright/chromium-*" > /dev/null 2>&1; then
           echo "Chromium browser already installed"
           echo "browser_installed=true" >> $GITHUB_OUTPUT
         else
