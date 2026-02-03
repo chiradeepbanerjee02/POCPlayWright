@@ -1,8 +1,0 @@
-pyproject.toml
-sample_pw.egg-info/PKG-INFO
-sample_pw.egg-info/SOURCES.txt
-sample_pw.egg-info/dependency_links.txt
-sample_pw.egg-info/requires.txt
-sample_pw.egg-info/top_level.txt
-tests/test_SearchValidation.py
-tests/test_TitleValidation.py
