@@ -27,14 +27,14 @@ jobs:
           $pythonVersion = & python --version 2>&1
           if ($pythonVersion -match "Python 3\.10") {
             Write-Host "Python 3.10 already installed and functional"
-            echo "python_installed=true" >> $env:GITHUB_OUTPUT
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "python_installed=true"
           } else {
             Write-Host "Python 3.10 not found or not functional"
-            echo "python_installed=false" >> $env:GITHUB_OUTPUT
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "python_installed=false"
           }
         } catch {
           Write-Host "Python 3.10 not found or not functional"
-          echo "python_installed=false" >> $env:GITHUB_OUTPUT
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "python_installed=false"
         }
         
     - name: Set up Python
@@ -52,7 +52,7 @@ jobs:
           $null = & python --version 2>&1
         } catch {
           Write-Host "Python not available, packages will need to be installed"
-          echo "packages_installed=false" >> $env:GITHUB_OUTPUT
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "packages_installed=false"
           exit 0
         }
         
@@ -74,10 +74,10 @@ jobs:
         }
         if ($allInstalled) {
           Write-Host "All required packages already installed"
-          echo "packages_installed=true" >> $env:GITHUB_OUTPUT
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "packages_installed=true"
         } else {
           Write-Host "Some packages need installation"
-          echo "packages_installed=false" >> $env:GITHUB_OUTPUT
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "packages_installed=false"
         }
         
     - name: Install dependencies
@@ -97,14 +97,14 @@ jobs:
           $chromiumDirs = Get-ChildItem -Path $playwrightPath -Filter "chromium-*" -ErrorAction SilentlyContinue
           if ($chromiumDirs) {
             Write-Host "Chromium browser already installed"
-            echo "browser_installed=true" >> $env:GITHUB_OUTPUT
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "browser_installed=true"
           } else {
             Write-Host "Chromium browser not found"
-            echo "browser_installed=false" >> $env:GITHUB_OUTPUT
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "browser_installed=false"
           }
         } else {
           Write-Host "Chromium browser not found"
-          echo "browser_installed=false" >> $env:GITHUB_OUTPUT
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "browser_installed=false"
         }
         
     - name: Install Playwright browsers
@@ -112,8 +112,9 @@ jobs:
       shell: pwsh
       run: |
         playwright install chromium
-        playwright install-deps chromium 2>&1 | Out-Null
-        if ($LASTEXITCODE -ne 0) {
+        try {
+          playwright install-deps chromium 2>&1 | Out-Null
+        } catch {
           Write-Host "Browser dependencies may need manual installation"
         }
         
