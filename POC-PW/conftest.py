@@ -59,7 +59,8 @@ def shared_page(shared_context):
     """
     p = shared_context.new_page()
     # Always start from a known state
-    page.goto(BASE_URL, wait_until="domcontentloaded")
+    p.goto(BASE_URL, wait_until="domcontentloaded")
     yield p
     p.close()
+
 
