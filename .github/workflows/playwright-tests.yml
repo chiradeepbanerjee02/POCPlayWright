@@ -19,17 +19,61 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Check Python installation
+      id: check-python
+      run: |
+        if command -v python3.10 &> /dev/null; then
+          echo "Python 3.10 already installed"
+          echo "python_installed=true" >> $GITHUB_OUTPUT
+        else
+          echo "Python 3.10 not found"
+          echo "python_installed=false" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Set up Python
+      if: steps.check-python.outputs.python_installed != 'true'
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+    
+    - name: Check pip packages
+      id: check-packages
+      run: |
+        all_installed=true
+        for package in pytest playwright pytest-playwright pytest-html; do
+          if ! python3.10 -m pip show "$package" &> /dev/null; then
+            echo "Package $package not found"
+            all_installed=false
+            break
+          fi
+        done
+        if [ "$all_installed" = true ]; then
+          echo "All required packages already installed"
+          echo "packages_installed=true" >> $GITHUB_OUTPUT
+        else
+          echo "Some packages need installation"
+          echo "packages_installed=false" >> $GITHUB_OUTPUT
+        fi
         
     - name: Install dependencies
+      if: steps.check-packages.outputs.packages_installed != 'true'
       run: |
-        python -m pip install --upgrade pip
+        python3.10 -m pip install --upgrade pip
         pip install pytest playwright pytest-playwright pytest-html
+    
+    - name: Check Playwright browser
+      id: check-browser
+      run: |
+        if [ -d "$HOME/.cache/ms-playwright/chromium-"* ] 2>/dev/null; then
+          echo "Chromium browser already installed"
+          echo "browser_installed=true" >> $GITHUB_OUTPUT
+        else
+          echo "Chromium browser not found"
+          echo "browser_installed=false" >> $GITHUB_OUTPUT
+        fi
         
     - name: Install Playwright browsers
+      if: steps.check-browser.outputs.browser_installed != 'true'
       run: |
         playwright install chromium
         playwright install-deps chromium || echo "Browser dependencies may need manual installation"
