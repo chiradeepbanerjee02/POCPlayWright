@@ -14,3 +14,6 @@ state.json
 
 # Build artifacts
 *.egg-info/
+
+# Test screenshots
+screenshots/
