@@ -31,6 +31,7 @@ def test_SearchValidation(shared_page):
        expect(el).to_have_count(1)     # exists in DOM
        # or, if it must be visible:
        expect(el).to_be_visible()
+       expect(el).to_be_enabled()
        print("Copy the first audit log to output")
        print("*************************************************")
        searchresultrow=shared_page.locator("xpath=//cdk-virtual-scroll-viewport//table//tbody/tr[2]")
@@ -44,6 +45,7 @@ def test_SearchValidation(shared_page):
        xml_text = html.unescape(textarea_inner)
        print(xml_text)
        print("*************************************************")
+
 
 
 
