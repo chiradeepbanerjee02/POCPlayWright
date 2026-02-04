@@ -1,8 +1,9 @@
+import pytest
 from playwright.sync_api import expect
 import re
 import html
-import random
 
+@pytest.mark.order(3)
 def test_PortValidation(page):
        page.goto("http://localhost:93/home/arr/actioncenter")
        #Enter UDP port in the text box
