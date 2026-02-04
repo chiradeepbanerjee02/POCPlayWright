@@ -94,7 +94,7 @@ def pytest_runtest_makereport(item, call):
                 pages = context.pages
                 if pages:
                     page = pages[0]
-            except Exception:
+            except (AttributeError, IndexError):
                 pass
         elif "browser" in item.funcargs:
             # If browser is available, try to get pages from active contexts
@@ -105,12 +105,12 @@ def pytest_runtest_makereport(item, call):
                     pages = contexts[0].pages
                     if pages:
                         page = pages[0]
-            except Exception:
+            except (AttributeError, IndexError):
                 pass
 
         if page:
-            # Generate a unique screenshot filename with timestamp
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            # Generate a unique screenshot filename with timestamp (including microseconds)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
             test_name = item.nodeid.replace("::", "_").replace("/", "_")
             screenshot_name = f"{test_name}_{timestamp}.png"
             screenshot_path = os.path.join(SCREENSHOTS_DIR, screenshot_name)
