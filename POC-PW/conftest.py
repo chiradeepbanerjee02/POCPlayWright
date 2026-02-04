@@ -87,6 +87,26 @@ def pytest_runtest_makereport(item, call):
             page = item.funcargs["page"]
         elif "shared_page" in item.funcargs:
             page = item.funcargs["shared_page"]
+        elif "context" in item.funcargs:
+            # If context is available, try to get pages from it
+            try:
+                context = item.funcargs["context"]
+                pages = context.pages
+                if pages:
+                    page = pages[0]
+            except Exception:
+                pass
+        elif "browser" in item.funcargs:
+            # If browser is available, try to get pages from active contexts
+            try:
+                browser = item.funcargs["browser"]
+                contexts = browser.contexts
+                if contexts:
+                    pages = contexts[0].pages
+                    if pages:
+                        page = pages[0]
+            except Exception:
+                pass
 
         if page:
             # Generate a unique screenshot filename with timestamp
