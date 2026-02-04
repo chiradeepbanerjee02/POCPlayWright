@@ -112,13 +112,16 @@ def pytest_runtest_makereport(item, call):
             # Generate a unique screenshot filename with timestamp (including microseconds)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
             test_name = item.nodeid.replace("::", "_").replace("/", "_")
+            # Truncate test name if too long to avoid filesystem path issues
+            if len(test_name) > 100:
+                test_name = test_name[:100]
             screenshot_name = f"{test_name}_{timestamp}.png"
             screenshot_path = os.path.join(SCREENSHOTS_DIR, screenshot_name)
 
             try:
                 page.screenshot(path=screenshot_path)
                 print(f"\n📸 Screenshot saved: {screenshot_path}")
-            except Exception as e:
+            except (OSError, IOError) as e:
                 print(f"\n⚠️ Failed to capture screenshot: {str(e)}")
 
 
