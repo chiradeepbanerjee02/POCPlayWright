@@ -37,6 +37,7 @@ def test_SearchValidation(shared_page):
        searchresultrow=shared_page.locator("xpath=//cdk-virtual-scroll-viewport//table//tbody/tr[2]")
        expect(searchresultrow).to_be_visible()
        searchresultrow.click()
+       shared_page.click("#load")
        auditmsg=shared_page.locator("xpath=//app-record-viewer//app-record-details/*[1]/*[1]")
        expect(auditmsg).to_be_visible()
        outer_html = auditmsg.evaluate("el => el.outerHTML")
@@ -45,6 +46,7 @@ def test_SearchValidation(shared_page):
        xml_text = html.unescape(textarea_inner)
        print(xml_text)
        print("*************************************************")
+
 
 
 
