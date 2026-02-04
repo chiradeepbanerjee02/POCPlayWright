@@ -120,8 +120,9 @@ def pytest_runtest_makereport(item, call):
 
             try:
                 page.screenshot(path=screenshot_path)
-                print(f"\n📸 Screenshot saved: {screenshot_path}")
+                print(f"\n Screenshot saved: {screenshot_path}")
             except (OSError, IOError) as e:
-                print(f"\n⚠️ Failed to capture screenshot: {str(e)}")
+                print(f"\n Failed to capture screenshot: {str(e)}")
+
 
 
